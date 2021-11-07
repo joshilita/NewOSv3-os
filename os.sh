@@ -28,6 +28,7 @@ echo -e "${GREENFG}All done! Restarting NewOS..."
 touch ~/NewOSv3/newos
 echo "bash ~/NewOSv3/os.sh" > ~/NewOSv3/newos
 sudo mv ~/NewOSv3/newos /usr/bin
+sudo chmod +x /usr/bin/newos
 rm -rf ~/NewOSv3/startup
 bash ~/NewOSv3/os.sh
 exit 0
