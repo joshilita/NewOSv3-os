@@ -26,8 +26,8 @@ echo "Installing Packeges... (Figlet, Zenity)"
 sudo apt install figlet dialog -y -qq > /dev/null
 echo -e "${GREENFG}All done! Restarting NewOS..."
 touch ~/NewOSv3/newos
-echo "bash ~/NewOSv3/os.sh" > ~/NewOSv3/startup
-sudo mv ~/NewOSv3/startups /usr/bin
+echo "bash ~/NewOSv3/os.sh" > ~/NewOSv3/newos
+sudo mv ~/NewOSv3/newos /usr/bin
 rm -rf ~/NewOSv3/startup
 bash ~/NewOSv3/os.sh
 exit 0
