@@ -12,7 +12,7 @@ password="$(<~/NewOSv3/.pass)"
 
 echo -e "${BBLUEFG}NewOS V3 who dis?"
 
-if [ -f startup ]; then
+if [ -f ~/NewOSv3/startup ]; then
 echo -e "${GBLUEFG}Welcome ${username}, to NewOS V3!"
 sleep 1 
 echo "It looks like its your first time here!"
