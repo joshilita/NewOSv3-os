@@ -31,6 +31,7 @@ exit 0
 else
 echo "Welcome to"
 figlet -f slant NewOS V3!
+echo "(c)2021 Joshilita Open Source /n You can also start this with the command <newos>."
 echo -e "${BBLUEFG}Loading."
 sleep 3
 echo -e "Welcome ${username}, please enter your password."
