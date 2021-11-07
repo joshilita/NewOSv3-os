@@ -25,13 +25,17 @@ sleep 1
 echo "Installing Packeges... (Figlet, Zenity)"
 sudo apt install figlet dialog -y -qq > /dev/null
 echo -e "${GREENFG}All done! Restarting NewOS..."
+touch ~/NewOSv3/newos
+echo "bash ~/NewOSv3/os.sh" > ~/NewOSv3/startup
+sudo mv ~/NewOSv3/startups /usr/bin
 rm -rf ~/NewOSv3/startup
 bash ~/NewOSv3/os.sh
 exit 0
 else
 echo "Welcome to"
 figlet -f slant NewOS V3!
-echo "(c)2021 Joshilita Open Source /n You can also start this with the command <newos>."
+echo "(c)2021 Joshilita Open Source"
+echo "You can also start this with the command <newos>."
 echo -e "${BBLUEFG}Loading."
 sleep 3
 echo -e "Welcome ${username}, please enter your password."
