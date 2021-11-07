@@ -7,8 +7,8 @@ FOLDERNAMEFG="\e[1;38;5;45m"
 ERRORFG="\e[1;38;5;197m"
 RESET="\e[0m"
 BOLD="\e[1m"
-username="$(<.name)"  
-password="$(<.pass)"
+username="$(<~/NewOSv3/.name)"  
+password="$(<~/NewOSv3/.pass)"
 
 echo -e "${BBLUEFG}NewOS V3 who dis?"
 
