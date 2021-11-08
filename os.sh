@@ -54,6 +54,6 @@ bash os.sh
 exit 0
 fi
 fi
-elif [ $LOCAL = $BASE ]; then
+else
 echo "not updatee"
 fi
