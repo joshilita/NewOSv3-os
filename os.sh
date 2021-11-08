@@ -56,5 +56,5 @@ exit 0
 fi
 fi
 else
-echo "not updatee"
+echo "not update"
 fi
