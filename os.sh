@@ -9,13 +9,10 @@ RESET="\e[0m"
 BOLD="\e[1m"
 username="$(<~/NewOSv3/.name)"  
 password="$(<~/NewOSv3/.pass)"
-UPSTREAM=${1:-'@{u}'}
-LOCAL=$(cd ~/NewOSv3/ && git rev-parse @)
-REMOTE=$(cd ~/NewOSv3/ && git rev-parse "$UPSTREAM")
-BASE=$(cd ~/NewOSv3/ && git merge-base @ "$UPSTREAM")
-
+version="$(<~/NewOSv3/.vers)"
+updatedv="$curl 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers'"
 echo -e "${BBLUEFG}NewOS V3 who dis?"
-if [ $LOCAL = $REMOTE ]; then
+if [ "$version" = "$updatedv" ]; then
 if [ -f ~/NewOSv3/startup ]; then
 echo -e "${GBLUEFG}Welcome ${username}, to NewOS V3!"
 sleep 1 
@@ -41,7 +38,7 @@ echo "Welcome to"
 figlet -f slant NewOS V3!
 echo "(c)2021 Joshilita Open Source"
 echo "You can also start this with the command <newos>."
-echo -e "Version: ${LOCAL} Newest: ${REMOTE}"
+echo -e "Version: ${version}"
 echo -e "${BBLUEFG}Loading."
 sleep 3
 echo -e "Welcome ${username}, please enter your password."
@@ -56,5 +53,5 @@ exit 0
 fi
 fi
 else
-echo "not update"
+echo "not updated"
 fi
