@@ -10,7 +10,7 @@ BOLD="\e[1m"
 username="$(<~/NewOSv3/.name)"  
 password="$(<~/NewOSv3/.pass)"
 version="$(<~/NewOSv3/.vers)"
-updatedv="$curl 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers'"
+updatedv=$(curl -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers')
 echo -e "${BBLUEFG}NewOS V3 who dis?"
 if [ "$version" = "$updatedv" ]; then
 if [ -f ~/NewOSv3/startup ]; then
