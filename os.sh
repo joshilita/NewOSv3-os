@@ -53,5 +53,5 @@ exit 0
 fi
 fi
 else
-echo "not updated"
+echo -e "Not updated, Current: ${version} New: ${updatedv}"
 fi
