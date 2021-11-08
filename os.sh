@@ -10,9 +10,9 @@ BOLD="\e[1m"
 username="$(<~/NewOSv3/.name)"  
 password="$(<~/NewOSv3/.pass)"
 UPSTREAM=${1:-'@{u}'}
-LOCAL=$(cd ~/NewOSv3/ | git rev-parse @)
-REMOTE=$(cd ~/NewOSv3/ | git rev-parse "$UPSTREAM")
-BASE=$(cd ~/NewOSv3/ | git merge-base @ "$UPSTREAM")
+LOCAL=$(cd ~/NewOSv3/ && git rev-parse @)
+REMOTE=$(cd ~/NewOSv3/ && git rev-parse "$UPSTREAM")
+BASE=$(cd ~/NewOSv3/ && git merge-base @ "$UPSTREAM")
 
 echo -e "${BBLUEFG}NewOS V3 who dis?"
 if [ $LOCAL = $REMOTE ]; then
