@@ -52,7 +52,7 @@ sleep 3
 echo -e "Welcome ${username}, please enter your password."
 read -r enterpass
 if [ "$enterpass" = "$password" ]; then
-echo "entrrr"
+echo -e "NewOS V3 is not done. Please wait until version 1.0. Current Version: ${version}"
 else
 echo -e "${ERRORFG}Wrong pass! Restarting..."
 sleep 4
