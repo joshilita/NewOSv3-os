@@ -10,8 +10,15 @@ BOLD="\e[1m"
 username="$(<~/NewOSv3/.name)"  
 password="$(<~/NewOSv3/.pass)"
 version="$(<~/NewOSv3/.vers)"
-updatedv=$(curl -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers')
+updatedv=$(curl 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers')
 echo -e "${BBLUEFG}NewOS V3 who dis?"
+if [ -f ~/NewOSv3/updated ]; then
+echo -e "${GREENFG}NewOS updated. Configuring.."
+sleep 2
+rm -rf ~NewOSv3/updated
+bash ~NewOSv3/updated
+exit 0
+fi
 if [ "$version" = "$updatedv" ]; then
 if [ -f ~/NewOSv3/startup ]; then
 echo -e "${GBLUEFG}Welcome ${username}, to NewOS V3!"
@@ -38,7 +45,7 @@ echo "Welcome to"
 figlet -f slant NewOS V3!
 echo "(c)2021 Joshilita Open Source"
 echo "You can also start this with the command <newos>."
-echo -e "Version: ${version}"
+echo -e "Version: ${version} Latest: ${updatedv}"
 echo -e "${BBLUEFG}Loading."
 sleep 3
 echo -e "Welcome ${username}, please enter your password."
@@ -54,4 +61,11 @@ fi
 fi
 else
 echo -e "Not updated, Current: ${version} New: ${updatedv}"
+echo "Please wait..."
+sleep 2
+cd ~
+git clone https://github.com/joshilita/update
+cd ~/update
+bash updater.sh
+exit 0
 fi
