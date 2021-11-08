@@ -55,5 +55,5 @@ exit 0
 fi
 fi
 elif [ $LOCAL = $BASE ]; then
-echo "not update"
+echo "not updatee"
 fi
