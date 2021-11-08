@@ -9,9 +9,13 @@ RESET="\e[0m"
 BOLD="\e[1m"
 username="$(<~/NewOSv3/.name)"  
 password="$(<~/NewOSv3/.pass)"
+UPSTREAM=${1:-'@{u}'}
+LOCAL=$(cd ~/NewOSv3/ | git rev-parse @)
+REMOTE=$(cd ~/NewOSv3/ | git rev-parse "$UPSTREAM")
+BASE=$(cd ~/NewOSv3/ | git merge-base @ "$UPSTREAM")
 
 echo -e "${BBLUEFG}NewOS V3 who dis?"
-
+if [ $LOCAL = $REMOTE ]; then
 if [ -f ~/NewOSv3/startup ]; then
 echo -e "${GBLUEFG}Welcome ${username}, to NewOS V3!"
 sleep 1 
@@ -49,4 +53,7 @@ sleep 4
 bash os.sh
 exit 0
 fi
+fi
+elif [ $LOCAL = $BASE ]; then
+echo "not update"
 fi
