@@ -56,7 +56,7 @@ echo "entrrr"
 else
 echo -e "${ERRORFG}Wrong pass! Restarting..."
 sleep 4
-bash os.sh
+bash ~/NewOSv3/os.sh
 exit 0
 fi
 fi
