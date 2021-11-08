@@ -53,6 +53,13 @@ echo -e "Welcome ${username}, please enter your password."
 read -r enterpass
 if [ "$enterpass" = "$password" ]; then
 echo -e "NewOS V3 is not done. Please wait until version 1.0. Current Version: ${version}"
+elif [ "$enterpass" = "resetpasswd" ]; then
+echo "Reset Pass"
+read -r passres
+echo "${passres}" > ~/NewOSv3/.pass
+echo "Password Resetted"
+newos
+exit 0
 else
 echo -e "${ERRORFG}Wrong pass! Restarting..."
 sleep 4
