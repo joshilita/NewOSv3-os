@@ -16,7 +16,7 @@ if [ -f ~/NewOSv3/updated ]; then
 echo -e "${GREENFG}NewOS updated. Configuring.."
 sleep 2
 rm -rf ~NewOSv3/updated
-bash ~NewOSv3/updated
+bash ~/NewOSv3/os.sh
 exit 0
 fi
 if [ "$version" = "$updatedv" ]; then
