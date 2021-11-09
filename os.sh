@@ -65,7 +65,6 @@ elif [ "$enterpass" = "changelog" ]; then
 echo -e $(curl -s 'https://raw.githubusercontent.com/joshilita/NewOSV3/main/changelog.txt')
 else
 echo -e "${ERRORFG}Wrong pass!"
-exit 0
 fi
 done
 fi
