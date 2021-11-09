@@ -50,7 +50,7 @@ echo -e "${REDWEAKFG}Please wait 5 minutes after a new update is released."
 echo -e "Version: ${version} Latest: ${updatedv}"
 echo -e "${BBLUEFG}Loading."
 sleep 3
-while true do
+while true; do
 echo -e "Welcome ${username}, please enter your password."
 read -r enterpass
 if [ "$enterpass" = "$password" ]; then
