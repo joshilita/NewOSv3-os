@@ -44,8 +44,8 @@ exit 0
 else
 echo "Welcome to"
 figlet -f slant NewOS V3!
-echo "(c)2021 Joshilita Open Source"
-echo "You can also start this with the command <newos>."
+echo -e "${REDWEAKFG}(c)2021 Joshilita Open Source"
+echo -e "${GBLUEFG}You can also start this with the command <newos>."
 echo -e "Version: ${version} Latest: ${updatedv}"
 echo -e "${BBLUEFG}Loading."
 sleep 3
