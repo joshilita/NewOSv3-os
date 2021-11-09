@@ -54,7 +54,7 @@ while true; do
 echo -e "Welcome ${username}, please enter your password."
 read -r enterpass
 if [ "$enterpass" = "$password" ]; then
-while true do
+while true; do
 if [ -f ~/NewOSv3/flogin ]; then
 echo -e "${GREENFG}This is your first time logging in!"
 sleep 2
