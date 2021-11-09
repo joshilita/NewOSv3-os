@@ -61,7 +61,7 @@ sleep 2
 echo -e "You can type <help> to see the list of commands."
 rm -rf ~/NewOSv3/flogin
 else
-echo -e -n "(${GREENFG}${value}${RESET}@${REDWEAKFG}localhost${RESET} ${BBLUEFG}${RESET}) ${BOLD}\$ ${RESET}";
+echo -e -n "(${GREENFG}${username}${RESET}@${REDWEAKFG}localhost${RESET} ${BBLUEFG}${RESET}) ${BOLD}\$ ${RESET}";
 read input
 fi
 done
