@@ -61,6 +61,9 @@ echo "${passres}" > ~/NewOSv3/.pass
 echo "Password Resetted"
 newos
 exit 0
+elif [ "$enterpass" = "changelog" ]; then 
+echo -e $(curl -s 'https://raw.githubusercontent.com/joshilita/NewOSV3/main/changelog.txt')
+return
 else
 echo -e "${ERRORFG}Wrong pass! Restarting..."
 sleep 4
