@@ -54,7 +54,17 @@ while true; do
 echo -e "Welcome ${username}, please enter your password."
 read -r enterpass
 if [ "$enterpass" = "$password" ]; then
-echo -e "NewOS V3 is not done. Please wait until version 1.0. Current Version: ${version}"
+while true do
+if [ -f ~/NewOSv3/flogin ]; then
+echo -e "${GREENFG}This is your first time logging in!"
+sleep 2
+echo -e "You can type <help> to see the list of commands."
+rm -rf ~/NewOSv3/flogin
+else
+echo -e -n "(${GREENFG}${value}${RESET}@${REDWEAKFG}localhost${RESET} ${BBLUEFG}${RESET}) ${BOLD}\$ ${RESET}";
+read input
+fi
+done
 elif [ "$enterpass" = "resetpasswd" ]; then
 echo "Reset Pass"
 read -r passres
