@@ -67,6 +67,13 @@ rm -rf ~/NewOSv3/flogin
 else
 echo -e -n "(${GREENFG}${username}${RESET}@${REDWEAKFG}localhost${RESET} ${BBLUEFG}${RESET}) ${BOLD}\$ ${RESET}";
 read input
+if [ "$input" = "help" ]; then
+echo -e "${RESET}exit - Exits NewOS"
+echo "help - Shows you a list of commamnds and what they can do"
+elseif [ "$input" = "exit" ]; then
+echo -e "${GREENFG}Bye!"
+exit
+fi
 fi
 done
 elif [ "$enterpass" = "resetpasswd" ]; then
