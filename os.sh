@@ -26,6 +26,9 @@ exit 0
 fi
 if [ "$version" = "$updatedv" ]; then
 if [ -f ~/NewOSv3/startup ]; then
+if [ "$machine" = "Android" ]; then
+echo -e "${ERRORFG}Unfortunately, Termux is not supported. ${BBLUEFG}Operating system detected as ${machine} ${RESET}"
+fi
 echo -e "${GBLUEFG}Welcome ${username}, to NewOS V3!"
 sleep 1 
 echo "It looks like its your first time here!"
@@ -54,6 +57,9 @@ echo -e "${REDWEAKFG}Please wait 5 minutes after a new update is released."
 echo -e "Version: ${version} Latest: ${updatedv}"
 echo -e "${BBLUEFG}Loading."
 sleep 3
+if [ "$machine" = "Android" ]; then
+echo -e "${ERRORFG}Unfortunately, Termux is not supported. How did you get here?${BBLUEFG}Operating system detected as ${machine} ${RESET}"
+fi
 while true; do
 echo -e "Welcome ${username}, please enter your password."
 read -s enterpass
@@ -65,6 +71,9 @@ sleep 2
 echo -e "You can type <help> to see the list of commands."
 rm -rf ~/NewOSv3/flogin
 else
+if [ "$machine" = "Android" ]; then
+echo -e "${ERRORFG}Unfortunately, Termux is not supported. ${BBLUEFG}Operating system detected as ${machine} ${RESET}"
+fi
 echo -e -n "(${GREENFG}${username}${RESET}@${REDWEAKFG}localhost${RESET} ${BBLUEFG}${RESET}) ${BOLD}\$ ${RESET}";
 read input
 if [ "$input" = "help" ]; then
