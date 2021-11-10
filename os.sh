@@ -70,9 +70,11 @@ read input
 if [ "$input" = "help" ]; then
 echo -e "${RESET}exit - Exits NewOS"
 echo "help - Shows you a list of commamnds and what they can do"
-elseif [ "$input" = "exit" ]; then
+elif [ "$input" = "exit" ]; then
 echo -e "${GREENFG}Bye!"
 exit 0
+elif [ "$input" = "changelog" ]; then
+echo -e $(curl -s 'https://raw.githubusercontent.com/joshilita/NewOSV3/main/changelog.txt')
 fi
 fi
 done
