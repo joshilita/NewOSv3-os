@@ -54,7 +54,7 @@ figlet -f slant NewOS V3!
 echo -e "${REDWEAKFG}(c)2021 Joshilita Open Source"
 echo -e "${GBLUEFG}You can also start this with the command <newos>."
 echo -e "${REDWEAKFG}Please wait 5 minutes after a new update is released."
-echo -e "Version: ${version} Latest: ${updatedv}"
+echo -e "Version: ${version}"
 echo -e "${BBLUEFG}Loading."
 sleep 3
 if [ "$machine" = "Android" ]; then
@@ -79,6 +79,8 @@ read input
 if [ "$input" = "help" ]; then
 echo -e "${RESET}exit - Exits NewOS"
 echo "help - Shows you a list of commamnds and what they can do"
+echo "changelog - It shows you a changelog."
+
 elif [ "$input" = "exit" ]; then
 echo -e "${GREENFG}Bye!${RESET}"
 exit 0
