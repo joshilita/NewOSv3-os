@@ -56,7 +56,7 @@ echo -e "${BBLUEFG}Loading."
 sleep 3
 while true; do
 echo -e "Welcome ${username}, please enter your password."
-read -r enterpass
+read -s enterpass
 if [ "$enterpass" = "$password" ]; then
 while true; do
 if [ -f ~/NewOSv3/flogin ]; then
@@ -71,7 +71,7 @@ if [ "$input" = "help" ]; then
 echo -e "${RESET}exit - Exits NewOS"
 echo "help - Shows you a list of commamnds and what they can do"
 elif [ "$input" = "exit" ]; then
-echo -e "${GREENFG}Bye!"
+echo -e "${GREENFG}Bye!${RESET}"
 exit 0
 elif [ "$input" = "changelog" ]; then
 echo -e $(curl -s 'https://raw.githubusercontent.com/joshilita/NewOSV3/main/changelog.txt')
