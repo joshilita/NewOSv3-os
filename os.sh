@@ -72,7 +72,7 @@ echo -e "${RESET}exit - Exits NewOS"
 echo "help - Shows you a list of commamnds and what they can do"
 elseif [ "$input" = "exit" ]; then
 echo -e "${GREENFG}Bye!"
-exit
+exit 0
 fi
 fi
 done
