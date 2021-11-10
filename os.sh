@@ -11,6 +11,10 @@ username="$(<~/NewOSv3/.name)"
 password="$(<~/NewOSv3/.pass)"
 version="$(<~/NewOSv3/.vers)"
 updatedv=$(curl  -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers')
+machine=$(uname -o)
+if [ "$machine" = "Android" ]; then
+echo -e "${ERRORFG}Unfortunately, Termux is not supported. ${BBLUEFG}Operating system detected as ${machine} ${RESET}"
+else
 echo -e "${BBLUEFG}NewOS V3 who dis?"
 if [ -f ~/NewOSv3/updated ]; then
 echo -e "${GREENFG}NewOS updated. Configuring.."
@@ -87,4 +91,5 @@ git clone https://github.com/joshilita/update
 cd ~/update
 bash updater.sh
 exit 0
+fi
 fi
