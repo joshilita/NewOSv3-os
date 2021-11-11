@@ -20,6 +20,7 @@ exit 0
 fi
 if [ "$ifazure" ]; then
 echo "ooo running on azure. nice"
+wait 3
 fi
 if [ "$machine" = "Android" ]; then
 echo -e "${ERRORFG}Unfortunately, Termux is not supported. ${BBLUEFG}Operating system detected as ${machine} ${RESET}"
