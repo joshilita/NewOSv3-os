@@ -14,6 +14,7 @@ updatedv=$(curl  -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main
 machine=$(uname -o)
 if [ ! "$machine" ]; then
 echo -e "${ERRORFG}OPERATING SYSTEM NOT FOUND${RESET}"
+exit 0
 fi
 if [ "$machine" = "Android" ]; then
 echo -e "${ERRORFG}Unfortunately, Termux is not supported. ${BBLUEFG}Operating system detected as ${machine} ${RESET}"
