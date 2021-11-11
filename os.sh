@@ -109,8 +109,8 @@ echo -e "${GREENFG}Bye!${RESET}"
 exit 0
 elif [ "$input" = "changelog" ]; then
 echo -e $(curl -s 'https://raw.githubusercontent.com/joshilita/NewOSV3/main/changelog.txt')
-elif [ "$input" = ^[[A^[[A^[[B^[[B^[[D^[[D^[[C^[[C^[[A^[[A^[[B^[[B^[[D^[[D^[[C^[[C ]; then
-echo "cool guy pogjoishgdgidu"
+elif [ "$input" = ""]; then
+echo "type something"
 else
 echo -e "${ERRORFG}(${input})Command not found.${RESET}"
 fi
