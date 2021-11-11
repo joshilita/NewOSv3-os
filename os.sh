@@ -12,9 +12,14 @@ password="$(<~/NewOSv3/.pass)"
 version="$(<~/NewOSv3/.vers)"
 updatedv=$(curl  -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers')
 machine=$(uname -o)
+ifazure=$(uname -a | grep azure)
+
 if [ ! "$machine" ]; then
-echo -e "${ERRORFG}OPERATING SYSTEM NOT FOUND${RESET}"
+echo -e "${ERRORFG}OPERATING SYSTEM NOT FOUND.${RESET}"
 exit 0
+fi
+if [ "$ifazure" ]; then
+echo "ooo running on azure. nice"
 fi
 if [ "$machine" = "Android" ]; then
 echo -e "${ERRORFG}Unfortunately, Termux is not supported. ${BBLUEFG}Operating system detected as ${machine} ${RESET}"
