@@ -96,6 +96,7 @@ else
 if [ "$machine" = "Android" ]; then
 echo -e "${ERRORFG}Unfortunately, Termux is not supported. ${BBLUEFG}Operating system detected as ${machine} ${RESET}"
 fi
+
 echo -e -n "(${GREENFG}${username}${RESET}@${REDWEAKFG}localhost${RESET} ${BBLUEFG}${RESET}) ${BOLD}\$ ${RESET}";
 read input
 if [ "$input" = "help" ]; then
@@ -108,6 +109,8 @@ echo -e "${GREENFG}Bye!${RESET}"
 exit 0
 elif [ "$input" = "changelog" ]; then
 echo -e $(curl -s 'https://raw.githubusercontent.com/joshilita/NewOSV3/main/changelog.txt')
+elif [ "$input" = "^[[A^[[A^[[B^[[B^[[D^[[D^[[C^[[C^[[A^[[A^[[B^[[B^[[D^[[D^[[C^[[C" ]
+echo "what"
 else
 echo -e "${ERRORFG}Command not found.${RESET}"
 fi
