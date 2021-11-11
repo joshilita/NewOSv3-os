@@ -112,7 +112,7 @@ echo -e $(curl -s 'https://raw.githubusercontent.com/joshilita/NewOSV3/main/chan
 elif [ "$input" = ^[[A^[[A^[[B^[[B^[[D^[[D^[[C^[[C^[[A^[[A^[[B^[[B^[[D^[[D^[[C^[[C ]; then
 echo "cool guy pogjoishgdgidu"
 else
-echo -e "${ERRORFG}Command not found.${RESET}"
+echo -e "${ERRORFG}(${input})Command not found.${RESET}"
 fi
 fi
 done
