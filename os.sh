@@ -36,6 +36,10 @@ fi
 echo -e "${GBLUEFG}Welcome ${username}, to NewOS V3!"
 sleep 1 
 echo "It looks like its your first time here!"
+if [ ! "$machine" ]; then
+echo -e "${ERRORFG}OPERATING SYSTEM NOT FOUND${RESET}"
+exit 0
+fi
 sleep 1 
 echo -e "We have to install some packages for this thing to get started! ${REDWEAKFG}(Requires Root Permission)${RESET}"
 sudo echo -e "${GREENFG}Permission Granted!${RESET}"
@@ -61,6 +65,10 @@ echo -e "${REDWEAKFG}Please wait 5 minutes after a new update is released."
 echo -e "Version: ${version}"
 echo -e "${BBLUEFG}Loading."
 sleep 3
+if [ ! "$machine" ]; then
+echo -e "${ERRORFG}OPERATING SYSTEM NOT FOUND${RESET}"
+exit 0
+fi
 if [ "$machine" = "Android" ]; then
 echo -e "${ERRORFG}Unfortunately, Termux is not supported. How did you get here?${BBLUEFG}Operating system detected as ${machine} ${RESET}"
 fi
@@ -72,6 +80,10 @@ while true; do
 if [ -f ~/NewOSv3/flogin ]; then
 echo -e "${GREENFG}This is your first time logging in!"
 sleep 2
+if [ ! "$machine" ]; then
+echo -e "${ERRORFG}OPERATING SYSTEM NOT FOUND${RESET}"
+exit 0
+fi
 echo -e "You can type <help> to see the list of commands."
 rm -rf ~/NewOSv3/flogin
 else
@@ -109,6 +121,10 @@ fi
 done
 fi
 else
+if [ ! "$machine" ]; then
+echo -e "${ERRORFG}OPERATING SYSTEM NOT FOUND${RESET}"
+exit 0
+fi
 echo -e "Not updated, Current: ${version} New: ${updatedv}"
 echo "Please wait..."
 sleep 2
