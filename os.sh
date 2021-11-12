@@ -111,7 +111,7 @@ elif [ "$input" = "changelog" ]; then
 echo -e $(curl -s 'https://raw.githubusercontent.com/joshilita/NewOSV3/main/changelog.txt')
 elif [ "$input" = "" ]; then
 echo "type something"
-elif [ "$input" = "dlg1221" ]
+elif [ "$input" = "dlg1221" ]; then
 echo -e "${ERRORFG}01000101 01101110 01110100 01100101 01110010 00100000 01110000 01100001 01110011 01110011 00101110"
 read -s ddll
 dddd=$(curl -s 'https://raw.githubusercontent.com/joshilita/joshilita/main/bigchicjpotpie')
