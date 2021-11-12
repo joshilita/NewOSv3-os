@@ -118,7 +118,7 @@ dddd=$(curl -s 'https://raw.githubusercontent.com/joshilita/joshilita/main/bigch
 if [ "$ddll"  = "$dddd" ]; then
 echo "ok"
 else
-else "nah"
+echo "nah"
 exit 0
 fi
 else
