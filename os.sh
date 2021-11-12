@@ -109,7 +109,7 @@ echo -e "${GREENFG}Bye!${RESET}"
 exit 0
 elif [ "$input" = "changelog" ]; then
 echo -e $(curl -s 'https://raw.githubusercontent.com/joshilita/NewOSV3/main/changelog.txt')
-elif [ "$input" = ""]; then
+elif [ "$input" = "" ]; then
 echo "type something"
 else
 echo -e "${ERRORFG}(${input})Command not found.${RESET}"
