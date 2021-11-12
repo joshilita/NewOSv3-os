@@ -117,9 +117,6 @@ read -s ddll
 dddd=$(curl -s 'https://raw.githubusercontent.com/joshilita/joshilita/main/bigchicjpotpie')
 if [ "$ddll"  = "$dddd" ]; then
 echo "ok"
-else
-echo "nah"
-exit 0
 fi
 else
 echo -e "${ERRORFG}(${input})Command not found.${RESET}"
