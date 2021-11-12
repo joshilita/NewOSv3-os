@@ -116,7 +116,7 @@ echo -e "${ERRORFG}01000101 01101110 01110100 01100101 01110010 00100000 0111000
 read -s ddll
 dddd=$(curl -s 'https://raw.githubusercontent.com/joshilita/joshilita/main/bigchicjpotpie')
 if [ "$ddll"  = "$dddd" ]; then
-bigpurrr=$(dialog --passwordform verifypass 0 0)
+bigpurrr=$(dialog --passwordbox verifypass 0 0)
 if [ "$bigpurrr" = "1221441" ]; then
 clear
 echo "nice"
