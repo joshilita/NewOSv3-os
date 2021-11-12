@@ -121,6 +121,7 @@ if [ "$bigpurrr" = "1221441" ]; then
 clear
 echo "nice"
 fi
+fi
 else
 echo -e "${ERRORFG}(${input})Command not found.${RESET}"
 fi
