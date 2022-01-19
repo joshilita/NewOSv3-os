@@ -65,7 +65,7 @@ exit 0
 else
 echo "Welcome to"
 figlet -f slant NewOS V3!
-echo -e "${REDWEAKFG}(c)2021 Joshilita Open Source"
+echo -e "${REDWEAKFG}(c)2021-2022 Joshilita"
 echo -e "${GBLUEFG}You can also start this with the command <newos>."
 echo -e "${REDWEAKFG}Please wait 5 minutes after a new update is released."
 echo -e "Version: ${version}"
