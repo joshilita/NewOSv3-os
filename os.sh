@@ -9,8 +9,11 @@ RESET="\e[0m"
 BOLD="\e[1m"
 username="$(<~/NewOSv3/.name)"  
 password="$(<~/NewOSv3/.pass)"
-version="$(<~/NewOSv3/.vers)"
-updatedv=$(curl  -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers')
+version="$(sed -n '1p' ~/NewOSv3/.vers)"
+insver="$(sed -n '3p' ~/NewOSv3/.vers)"
+updatedv=$(curl  -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers' | sed -n '1p')
+updateins=$(curl  -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers' | sed -n '3p')
+
 machine=$(uname -o)
 ifazure=$(uname -a | grep azure)
 host="$(<~/NewOSv3/.host)"
@@ -34,6 +37,7 @@ rm -rf ~/update
 bash ~/NewOSv3/os.sh
 exit 0
 fi
+if [ "$insver" = "$updateins" ]; then
 if [ "$version" = "$updatedv" ]; then
 if [ -f ~/NewOSv3/startup ]; then
 if [ "$machine" = "Android" ]; then
@@ -154,4 +158,7 @@ cd ~/update
 bash updater.sh
 exit 0
 fi
+else 
+
+echo "ins noat upadj"
 fi
