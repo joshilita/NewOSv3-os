@@ -144,6 +144,7 @@ echo -e "${ERRORFG}Wrong pass!"
 fi
 done
 fi
+
 else
 if [ ! "$machine" ]; then
 echo -e "${ERRORFG}OPERATING SYSTEM NOT FOUND${RESET}"
@@ -158,8 +159,8 @@ cd ~/update
 bash updater.sh
 exit 0
 fi
-fi
 else 
 
 echo "ins noat upadj"
 fi
+
