@@ -158,7 +158,7 @@ cd ~/update
 bash updater.sh
 exit 0
 fi
+fi
 else 
 
 echo "ins noat upadj"
-fi
