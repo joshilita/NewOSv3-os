@@ -84,7 +84,7 @@ echo -e "${ERRORFG}Unfortunately, Termux is not supported. How did you get here?
 fi
 FILE=~/NewOSv3/.host
 if [ ! -f "$FILE" ]; then
-    echo -e "${REDWEAKFG} NewOS needs to be installed. Please update the installer and reinstall NewOS.${RESET}"
+    echo -e "${REDWEAKFG} NewOS needs to be reinstalled due to a major bug fix. Please update the installer and reinstall NewOS.${RESET}"
     exit 0
 fi
 while true; do
