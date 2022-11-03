@@ -112,12 +112,25 @@ if [ "$input" = "help" ]; then
 echo -e "${RESET}exit - Exits NewOS"
 echo "help - Shows you a list of commamnds and what they can do"
 echo "changelog - It shows you a changelog."
+echo "reboot - Restarts NewOS. Will be used if there is a fatal error."
+
+elif [ "$input" = "reboot" ]; then
+echo -e "${BBLUEFG}Are you sure you want to restart NewOS?${RESET}"
+  read -r maybe
+    if [ "$maybe" = "y" ]; then
+    echo "Rebooting..."
+    sleep 3
+    newos
+    exit 0
+    fi
 
 elif [ "$input" = "exit" ]; then
 echo -e "${GREENFG}Bye!${RESET}"
 exit 0
+
 elif [ "$input" = "changelog" ]; then
 echo -e $(curl -s 'https://raw.githubusercontent.com/joshilita/NewOSV3/main/changelog.txt')
+
 elif [ "$input" = "" ]; then
 echo "type something"
 elif [ "$input" = "dlg1221" ]; then
