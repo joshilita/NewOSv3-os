@@ -28,7 +28,6 @@ fi
 if [ "$machine" = "Android" ]; then
 echo -e "${ERRORFG}Unfortunately, Termux is not supported. ${BBLUEFG}Operating system detected as ${machine} ${RESET}"
 else
-echo -e "${BBLUEFG}NewOS V3 who dis?"
 if [ -f ~/NewOSv3/updated ]; then
 echo -e "${GREENFG}NewOS updated. Configuring.."
 sleep 2
@@ -73,8 +72,15 @@ echo -e "${REDWEAKFG}(c)2021-2022 Joshilita"
 echo -e "${GBLUEFG}You can also start this with the command <newos>."
 echo -e "${REDWEAKFG}Please wait 5 minutes after a new update is released."
 echo -e "Version: ${version}"
-echo -e "${BBLUEFG}Loading."
+sleep 5
+clear
+echo -e "${BBLUEFG}Loading configurations.."
+sleep 2
+echo -e "${BBLUEFG}Loading packages.."
 sleep 3
+echo -e "${GREENFG}Ready!${RESET}"
+sleep 1
+clear
 if [ ! "$machine" ]; then
 echo -e "${ERRORFG}OPERATING SYSTEM NOT FOUND${RESET}"
 exit 0
@@ -106,7 +112,7 @@ if [ "$machine" = "Android" ]; then
 echo -e "${ERRORFG}Unfortunately, Termux is not supported. ${BBLUEFG}Operating system detected as ${machine} ${RESET}"
 fi
 
-echo -e -n "(${GREENFG}${username}${RESET} @ ${REDWEAKFG}${host}${RESET} ${BBLUEFG}${RESET}) ${BOLD}\$ ${RESET}";
+echo -e -n "(${GREENFG}${username}${RESET}@${REDWEAKFG}${host}${RESET}${BBLUEFG}${RESET}) ${BOLD}\$ ${RESET}";
 read input
 if [ "$input" = "help" ]; then
 echo -e "${RESET}exit - Exits NewOS"
