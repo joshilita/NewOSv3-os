@@ -119,6 +119,15 @@ echo -e "${RESET}exit - Exits NewOS"
 echo "help - Shows you a list of commamnds and what they can do"
 echo "changelog - It shows you a changelog."
 echo "reboot - Restarts NewOS. Will be used if there is a fatal error."
+echo "host - Change hostname. Restart is required."
+
+elif [ "$input" = "host" ]; then
+echo -e "${BBLUEFG}What do you want to change your hostname to?${RESET}"
+read -r hostfh
+echo "${hostfh}" > ~/NewOSv3/.host
+echo -e "${GREENFG}Hostname changed to: ${hostfh}. A restart is required for effect.${CLEAR}"
+
+
 
 elif [ "$input" = "reboot" ]; then
 echo -e "${BBLUEFG}Are you sure you want to restart NewOS?${RESET}"
