@@ -82,6 +82,11 @@ fi
 if [ "$machine" = "Android" ]; then
 echo -e "${ERRORFG}Unfortunately, Termux is not supported. How did you get here?${BBLUEFG}Operating system detected as ${machine} ${RESET}"
 fi
+FILE=~/NewOSv3/.host
+if [ ! -f "$FILE" ]; then
+    echo -e "${REDWEAKFG} NewOS needs to be installed. Please update the installer and reinstall NewOS.${RESET}"
+    exit 0
+fi
 while true; do
 echo -e "Welcome ${username}, please enter your password."
 read -s enterpass
