@@ -11,8 +11,8 @@ username="$(<~/NewOSv3/.name)"
 password="$(<~/NewOSv3/.pass)"
 version="$(sed -n '1p' ~/NewOSv3/.vers)"
 insver="$(sed -n '3p' ~/NewOSv3/.vers)"
-updatedv=$(curl  -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers/' | sed -n '1p')
-updateins=$(curl  -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers/' | sed -n '3p')
+updatedv=$(curl  -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers' | sed -n '1p')
+updateins=$(curl  -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers' | sed -n '3p')
 clear
 machine=$(uname -o)
 ifazure=$(uname -a | grep azure)
