@@ -13,7 +13,7 @@ version="$(sed -n '1p' ~/NewOSv3/.vers)"
 insver="$(sed -n '3p' ~/NewOSv3/.vers)"
 updatedv=$(curl  -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers' | sed -n '1p')
 updateins=$(curl  -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers' | sed -n '3p')
-
+clear
 machine=$(uname -o)
 ifazure=$(uname -a | grep azure)
 host="$(<~/NewOSv3/.host)"
@@ -106,7 +106,7 @@ if [ "$machine" = "Android" ]; then
 echo -e "${ERRORFG}Unfortunately, Termux is not supported. ${BBLUEFG}Operating system detected as ${machine} ${RESET}"
 fi
 
-echo -e -n "(${GREENFG}${username}${RESET}@${REDWEAKFG}${host}${RESET} ${BBLUEFG}${RESET}) ${BOLD}\$ ${RESET}";
+echo -e -n "(${GREENFG}${username}${RESET} @ ${REDWEAKFG}${host}${RESET} ${BBLUEFG}${RESET}) ${BOLD}\$ ${RESET}";
 read input
 if [ "$input" = "help" ]; then
 echo -e "${RESET}exit - Exits NewOS"
