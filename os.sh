@@ -120,6 +120,27 @@ echo "help - Shows you a list of commamnds and what they can do"
 echo "changelog - It shows you a changelog."
 echo "reboot - Restarts NewOS. Will be used if there is a fatal error."
 echo "host - Change hostname. Restart is required."
+elif [ "$input" = "pcks get" ]; then
+touch ~/ReplRoot/templist.txt
+echo -e "${BBLUEFG}Getting all packages. This may take a while.${RESET}"
+echo ""
+
+yes=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name")
+amount=$(echo "$yes" | wc -l)
+actual=$(($amount-1))
+# echo $(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[${actual}]")
+for line in $yes 
+do
+yessir=$(($yessir+1))
+   echo "Name: ${line}"|sed 's/"//g' >> ~/ReplRoot/templist.txt
+info=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($yessir-1))].infolink ")
+maybeso=$(echo "${info}" | sed 's/"//g')
+
+echo "Description: $(curl -s ${maybeso} | jq ".description " | sed 's/"//g')" >> ~/ReplRoot/templist.txt
+echo "" >> ~/ReplRoot/templist.txt
+done
+cat ~/ReplRoot/templist.txt
+rm  ~/ReplRoot/templist.txt
 
 elif [ "$input" = "host" ]; then
 echo -e "${BBLUEFG}What do you want to change your hostname to?${RESET}"
