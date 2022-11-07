@@ -131,7 +131,11 @@ actual=$(($amount-1))
 # echo $(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[${actual}]")
 for line in $yes 
 do
+
 yessir=$(($yessir+1))
+tput rc
+tput ed
+echo "Percentage: ${yessir}/${amount}"
    echo "Name: ${line}"|sed 's/"//g' >> ~/ReplRoot/templist.txt
 info=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($yessir-1))].infolink ")
 maybeso=$(echo "${info}" | sed 's/"//g')
