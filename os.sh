@@ -123,8 +123,8 @@ echo "host - Change hostname. Restart is required."
 elif [ "$input" = "pcks get" ]; then
 touch ~/ReplRoot/templist.txt
 echo -e "${BBLUEFG}Getting all packages. This may take a while.${RESET}"
-echo ""
-
+tput sc
+yessir = 0
 yes=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name")
 amount=$(echo "$yes" | wc -l)
 actual=$(($amount-1))
@@ -133,8 +133,7 @@ for line in $yes
 do
 
 yessir=$(($yessir+1))
-tput rc
-tput ed
+tput rc;tput el 
 echo "Percentage: ${yessir}/${amount}"
    echo "Name: ${line}"|sed 's/"//g' >> ~/ReplRoot/templist.txt
 info=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($yessir-1))].infolink ")
