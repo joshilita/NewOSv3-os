@@ -120,6 +120,43 @@ echo "help - Shows you a list of commamnds and what they can do"
 echo "changelog - It shows you a changelog."
 echo "reboot - Restarts NewOS. Will be used if there is a fatal error."
 echo "host - Change hostname. Restart is required."
+elif [ "$input" = "pcks install" ]; then
+echo -e "${BBLUEFG}What package would you like to install?${RESET}"
+read pinstall
+echo -e "${BBLUEFG}Checking package database..${RESET}"
+hello=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name" | grep -w ${pinstall} -c)
+ if (( $hello == 0 )); then
+ echo -e "${ERRORFG}Package "${pinstall}" is not found. Please check if you entered the right package name.${RESET}"
+else
+echo -e "${GREENFG}Package found!${RESET}"
+
+echo -e "${BBLUEFG}Checking inner OS package requirement...${RESET}"
+packagereq=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($hello-1))].infolink ")
+maybetes=$(echo "${packagereq}" | sed 's/"//g')
+yas=$(curl -s ${maybetes} | jq ".requirements " | sed 's/"//g')
+if (( $yas == "None" )); then
+echo -e "${BBLUEFG}No requirements found. Installing Package${RESET}"
+if [ ! -d ~/NewOSv3/Packages ]; then
+ echo -e "${BBLUEFG}Creating packages folder.${RESET}" 
+ mkdir ~/NewOSv3/Packages
+fi
+if [ -d ~/NewOSv3/Packages/${pinstall} ]; then
+echo -e "${ERRORFG}Package "${pinstall}" is already installed.${RESET}"
+else
+
+echo -e "${BBLUEFG}Downloading package...${RESET}"
+mkdir ~/NewOSv3/Packages/${pinstall}
+touch ~/NewOSv3/Packages/${pinstall}/run.sh
+curl -s "https://raw.githubusercontent.com/joshilita/packages/main/${pinstall}/run.sh" >> ~/NewOSv3/Packages/${pinstall}/run.sh
+echo -e "${GREENFG}Package installed!${RESET}"
+
+
+
+fi
+fi
+
+fi
+echo "${hello}"
 elif [ "$input" = "pcks get" ]; then
 touch ~/templist.txt
 echo -e "${BBLUEFG}Getting all packages. This may take a while.${RESET}"
@@ -184,7 +221,17 @@ echo "nice"
 fi
 fi
 else
+if [ -d ~/NewOSv3/Packages/${input} ]; then
+if grep -q "404: Not Found" ~/NewOSv3/Packages/${input}/run.sh; then
+  echo -e "${ERRORFG}Package was installed incorrectly. Please try to install the package again.${RESET}"
+else
+bash ~/NewOSv3/Packages/${input}/run.sh
+fi
+ 
+else
 echo -e "${ERRORFG}(${input})Command not found.${RESET}"
+fi
+
 fi
 fi
 done
