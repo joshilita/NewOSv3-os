@@ -121,7 +121,7 @@ echo "changelog - It shows you a changelog."
 echo "reboot - Restarts NewOS. Will be used if there is a fatal error."
 echo "host - Change hostname. Restart is required."
 elif [ "$input" = "pcks get" ]; then
-touch ~/ReplRoot/templist.txt
+touch ~/templist.txt
 echo -e "${BBLUEFG}Getting all packages. This may take a while.${RESET}"
 tput sc
 yessir=0
