@@ -55,8 +55,8 @@ sudo echo -e "${GREENFG}Permission Granted!${RESET}"
 echo "Updating Packages..."
 sudo apt update -y -qq > /dev/null
 sleep 1
-echo "Installing Packeges... (Figlet, Zenity)"
-sudo apt install figlet dialog -y -qq > /dev/null
+echo "Installing Packeges... (Figlet, Zenity, jq)"
+sudo apt install figlet dialog jq -y -qq > /dev/null
 echo -e "${GREENFG}All done! Restarting NewOS..."
 touch ~/NewOSv3/newos
 echo "bash ~/NewOSv3/os.sh" > ~/NewOSv3/newos
@@ -135,15 +135,15 @@ do
 yessir=$(($yessir+1))
 tput rc;tput el 
 echo "Percentage: ${yessir}/${amount}"
-   echo "Name: ${line}"|sed 's/"//g' >> ~/ReplRoot/templist.txt
+   echo "Name: ${line}"|sed 's/"//g' >> ~/templist.txt
 info=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($yessir-1))].infolink ")
 maybeso=$(echo "${info}" | sed 's/"//g')
 
-echo "Description: $(curl -s ${maybeso} | jq ".description " | sed 's/"//g')" >> ~/ReplRoot/templist.txt
-echo "" >> ~/ReplRoot/templist.txt
+echo "Description: $(curl -s ${maybeso} | jq ".description " | sed 's/"//g')" >> ~/templist.txt
+echo "" >> ~/templist.txt
 done
-cat ~/ReplRoot/templist.txt
-rm  ~/ReplRoot/templist.txt
+cat ~/templist.txt
+rm  ~/templist.txt
 
 elif [ "$input" = "host" ]; then
 echo -e "${BBLUEFG}What do you want to change your hostname to?${RESET}"
