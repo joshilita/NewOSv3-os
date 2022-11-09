@@ -142,7 +142,7 @@ if (( $inst == "Yes" )); then
  echo -e "${BBLUEFG}Package needs to be ran after installation.${RESET}" 
 
 fi
-if (( $yas != "None" )); then
+if (( $yas == "None" )); then
 echo -e "${BBLUEFG}No requirements found. Installing Package${RESET}"
 
 else
