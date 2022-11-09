@@ -11,8 +11,8 @@ username="$(<~/NewOSv3/.name)"
 password="$(<~/NewOSv3/.pass)"
 version="$(sed -n '1p' ~/NewOSv3/.vers)"
 insver="$(sed -n '3p' ~/NewOSv3/.vers)"
-updatedv=$(curl  -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers' | sed -n '1p')
-updateins=$(curl  -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers' | sed -n '3p')
+updatedv=$(curl -H 'Cache-Control: no-cache' -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers' | sed -n '1p')
+updateins=$(curl -H 'Cache-Control: no-cache' -s 'https://raw.githubusercontent.com/joshilita/NewOSv3-os/main/.vers' | sed -n '3p')
 clear
 machine=$(uname -o)
 ifazure=$(uname -a | grep azure)
@@ -178,7 +178,7 @@ touch ~/templist.txt
 echo -e "${BBLUEFG}Getting all packages. This may take a while.${RESET}"
 tput sc
 yessir=0
-yes=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name")
+yes=$(curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name")
 amount=$(echo "$yes" | wc -l)
 actual=$(($amount-1))
 # echo $(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[${actual}]")
@@ -189,7 +189,7 @@ yessir=$(($yessir+1))
 tput rc;tput el 
 echo "Percentage: ${yessir}/${amount}"
    echo "Name: ${line}"|sed 's/"//g' >> ~/templist.txt
-info=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($yessir-1))].infolink ")
+info=$(curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($yessir-1))].infolink ")
 maybeso=$(echo "${info}" | sed 's/"//g')
 idkhaha=$(echo "${line}" | sed 's/"//g')
 
