@@ -142,8 +142,18 @@ if (( $inst == "Yes" )); then
  echo -e "${BBLUEFG}Package needs to be ran after installation.${RESET}" 
 
 fi
-if (( $yas == "None" )); then
+if (( $yas != "None" )); then
+echo -e "${BBLUEFG}Requirements found. We need to install some inner OS packages using APT. (REQUIRES SUDO)${RESET}"
+sudo echo "${GREENFG}Installing these packages: ${BBLUEFG}${yas}${RESET}"
+sleep 3
+sudo apt update -y -qq > /dev/null
+sudo apt install ${yas} -y 
+
+
+else
+
 echo -e "${BBLUEFG}No requirements found. Installing Package${RESET}"
+fi
 if [ ! -d ~/NewOSv3/Packages ]; then
  echo -e "${BBLUEFG}Creating packages folder.${RESET}" 
  mkdir ~/NewOSv3/Packages
@@ -165,7 +175,6 @@ if (( $inst == "Yes" )); then
  bash ~/NewOSv3/Packages/${pinstall}/run.sh
 
 
-fi
 
 
 fi
