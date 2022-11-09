@@ -249,7 +249,7 @@ if [ "$ddll"  = "$dddd" ]; then
 data=$(dialog --passwordbox "Enter your password" 10 30 3>&1- 1>&2- 2>&3-)
 if [ "$data" = "1221441" ]; then
 clear
-echo "nice"
+echo "niece"
 fi
 fi
 else
