@@ -178,9 +178,10 @@ echo "Percentage: ${yessir}/${amount}"
    echo "Name: ${line}"|sed 's/"//g' >> ~/templist.txt
 info=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($yessir-1))].infolink ")
 maybeso=$(echo "${info}" | sed 's/"//g')
+idkhaha=$(echo "${line}" | sed 's/"//g')
 
 echo "Description: $(curl -s ${maybeso} | jq ".description " | sed 's/"//g')" >> ~/templist.txt
-if [ -d ~/NewOSv3/Packages/${line} ]; then
+if [ -d ~/NewOSv3/Packages/${idkhaha} ]; then
 echo "Installed: Yes" >> ~/templist.txt
 else
 echo "Installed: No" >> ~/templist.txt
