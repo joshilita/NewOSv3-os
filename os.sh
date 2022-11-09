@@ -160,7 +160,8 @@ echo -e "${GREENFG}Package installed!${RESET}"
 if (( $inst == "Yes" )); then
  echo -e "${BBLUEFG}Starting package.${RESET}" 
  sleep 1
- touch ~/NewOSV3/Packages/${pinstall}/startup
+
+ touch ~/NewOSv3/Packages/${pinstall}/startup
  bash ~/NewOSv3/Packages/${pinstall}/run.sh
 
 
