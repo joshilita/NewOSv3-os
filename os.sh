@@ -143,6 +143,9 @@ if (( $inst == "Yes" )); then
 
 fi
 if (( $yas != "None" )); then
+echo -e "${BBLUEFG}No requirements found. Installing Package${RESET}"
+
+else
 echo -e "${BBLUEFG}Requirements found. We need to install some inner OS packages using APT. (REQUIRES SUDO)${RESET}"
 sudo echo "${GREENFG}Installing these packages: ${BBLUEFG}${yas}${RESET}"
 sleep 3
@@ -150,9 +153,6 @@ sudo apt update -y -qq > /dev/null
 sudo apt install ${yas} -y 
 
 
-else
-
-echo -e "${BBLUEFG}No requirements found. Installing Package${RESET}"
 fi
 if [ ! -d ~/NewOSv3/Packages ]; then
  echo -e "${BBLUEFG}Creating packages folder.${RESET}" 
