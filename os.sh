@@ -137,6 +137,11 @@ echo -e "${BBLUEFG}Checking inner OS package requirement...${RESET}"
 packagereq=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($hello-1))].infolink ")
 maybetes=$(echo "${packagereq}" | sed 's/"//g')
 yas=$(curl -s ${maybetes} | jq ".requirements " | sed 's/"//g')
+inst=$(curl -s ${maybetes} | jq ".runafterinstall " | sed 's/"//g')
+if (( $inst == "Yes" )); then
+ echo -e "${BBLUEFG}Package needs to be ran after installation.${RESET}" 
+
+fi
 if (( $yas == "None" )); then
 echo -e "${BBLUEFG}No requirements found. Installing Package${RESET}"
 if [ ! -d ~/NewOSv3/Packages ]; then
@@ -152,7 +157,14 @@ mkdir ~/NewOSv3/Packages/${pinstall}
 touch ~/NewOSv3/Packages/${pinstall}/run.sh
 curl -s "https://raw.githubusercontent.com/joshilita/packages/main/${pinstall}/run.sh" >> ~/NewOSv3/Packages/${pinstall}/run.sh
 echo -e "${GREENFG}Package installed!${RESET}"
+if (( $inst == "Yes" )); then
+ echo -e "${BBLUEFG}Starting package.${RESET}" 
+ sleep 1
+ touch ~/NewOSV3/Packages/${pinstall}/startup
+ bash ~/NewOSv3/Packages/${pinstall}/run.sh
 
+
+fi
 
 
 fi
