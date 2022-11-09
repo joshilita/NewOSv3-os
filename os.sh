@@ -132,6 +132,9 @@ hello=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.j
  echo -e "${ERRORFG}Package "${pinstall}" is not found. Please check if you entered the right package name.${RESET}"
 else
 echo -e "${GREENFG}Package found!${RESET}"
+if [ -d ~/NewOSv3/Packages/${pinstall} ]; then
+echo -e "${ERRORFG}Package "${pinstall}" is already installed.${RESET}"
+else
 
 echo -e "${BBLUEFG}Checking inner OS package requirement...${RESET}"
 packagereq=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($hello-1))].infolink ")
@@ -142,12 +145,12 @@ if (( $inst == "Yes" )); then
  echo -e "${BBLUEFG}Package needs to be ran after installation.${RESET}" 
 
 fi
-if (( $yas == "None" )); then
+if  [ "${yas}" == "None" ]; then
 echo -e "${BBLUEFG}No requirements found. Installing Package${RESET}"
 
 else
 echo -e "${BBLUEFG}Requirements found. We need to install some inner OS packages using APT. (REQUIRES SUDO)${RESET}"
-sudo echo "${GREENFG}Installing these packages: ${BBLUEFG}${yas}${RESET}"
+sudo echo -e "${GREENFG}Installing these packages: ${BBLUEFG}${yas}${RESET}"
 sleep 3
 sudo apt update -y -qq > /dev/null
 sudo apt install ${yas} -y 
@@ -158,9 +161,6 @@ if [ ! -d ~/NewOSv3/Packages ]; then
  echo -e "${BBLUEFG}Creating packages folder.${RESET}" 
  mkdir ~/NewOSv3/Packages
 fi
-if [ -d ~/NewOSv3/Packages/${pinstall} ]; then
-echo -e "${ERRORFG}Package "${pinstall}" is already installed.${RESET}"
-else
 
 echo -e "${BBLUEFG}Downloading package...${RESET}"
 mkdir ~/NewOSv3/Packages/${pinstall}
