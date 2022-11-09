@@ -120,6 +120,9 @@ echo "help - Shows you a list of commamnds and what they can do"
 echo "changelog - It shows you a changelog."
 echo "reboot - Restarts NewOS. Will be used if there is a fatal error."
 echo "host - Change hostname. Restart is required."
+echo "pcks get - Shows list of available packages"
+echo "pcks install - Installs package"
+
 elif [ "$input" = "pcks install" ]; then
 echo -e "${BBLUEFG}What package would you like to install?${RESET}"
 read pinstall
@@ -177,6 +180,12 @@ info=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.js
 maybeso=$(echo "${info}" | sed 's/"//g')
 
 echo "Description: $(curl -s ${maybeso} | jq ".description " | sed 's/"//g')" >> ~/templist.txt
+if [ -d ~/NewOSv3/Packages/${line} ]; then
+echo "Installed: Yes" >> ~/templist.txt
+else
+echo "Installed: No" >> ~/templist.txt
+
+fi
 echo "" >> ~/templist.txt
 done
 cat ~/templist.txt
