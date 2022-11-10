@@ -122,48 +122,6 @@ echo "reboot - Restarts NewOS. Will be used if there is a fatal error."
 echo "host - Change hostname. Restart is required."
 echo "pcks get - Shows list of available packages"
 echo "pcks install - Installs package"
-elif [ "$input" = "pcks reinstall" ]; then
-echo -e "${BBLUEFG}What package would you like to reinstall?${RESET}"
-read preinstall
-echo -e "${BBLUEFG}Checking if package is installed...${RESET}"
-if [ -d ~/NewOSv3/Packages/${preinstall} ]; then
-echo -e "${BBLUEFG}Package found. Checking if package is in database...${RESET}"
-byey=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name" | grep -w ${preinstall} -c)
- if (( $byey == 0 )); then
- echo -e "${ERRORFG}Package "${preinstall}" is not found. Please check if you entered the right package name.${RESET}"
- else
- echo -e "${BBLUEFG}Package found in database. Reinstalling.${RESET}"
- rm -rf ~/NewOSv3/Packages/${preinstall}
-  echo -e "${BBLUEFG}Uninstalling Package..${RESET}"
-
- sleep 1
-   echo -e "${BBLUEFG}Installing Package..${RESET}"
-
- mkdir ~/NewOSv3/Packages/${preinstall}
-touch ~/NewOSv3/Packages/${preinstall}/run.sh
-curl -s "https://raw.githubusercontent.com/joshilita/packages/main/${preinstall}/run.sh" >> ~/NewOSv3/Packages/${pinstall}/run.sh
-inst=$(curl -s ${maybetes} | jq ".runafterinstall " | sed 's/"//g')
-
-echo -e "${GREENFG}Package installed!${RESET}"
-if (( $inst == "Yes" )); then
- echo -e "${BBLUEFG}Starting package.${RESET}" 
- sleep 1
-
- touch ~/NewOSv3/Packages/${preinstall}/startup
- bash ~/NewOSv3/Packages/${preinstall}/run.sh
-
-
-
-
-fi
-
-
-fi
-
-
-else
- echo -e "${ERRORFG}Package "${pinstall}" is not installed. Please check if you entered the right package name.${RESET}"
-fi
 
 elif [ "$input" = "pcks install" ]; then
 echo -e "${BBLUEFG}What package would you like to install?${RESET}"
@@ -174,25 +132,30 @@ hello=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.j
  echo -e "${ERRORFG}Package "${pinstall}" is not found. Please check if you entered the right package name.${RESET}"
 else
 echo -e "${GREENFG}Package found!${RESET}"
-if [ -d ~/NewOSv3/Packages/${pinstall} ]; then
-echo -e "${ERRORFG}Package "${pinstall}" is already installed.${RESET}"
-else
 
-echo -e "${BBLUEFG}Checking other requirements...${RESET}"
+echo -e "${BBLUEFG}Checking inner OS package requirement...${RESET}"
 packagereq=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($hello-1))].infolink ")
 maybetes=$(echo "${packagereq}" | sed 's/"//g')
 yas=$(curl -s ${maybetes} | jq ".requirements " | sed 's/"//g')
+inst=$(curl -s ${maybetes} | jq ".runafterinstall " | sed 's/"//g')
+if (( $inst == "Yes" )); then
+ echo -e "${BBLUEFG}Package needs to be ran after installation.${RESET}" 
 
+fi
+if (( $yas == "None" )); then
+echo -e "${BBLUEFG}No requirements found. Installing Package${RESET}"
 if [ ! -d ~/NewOSv3/Packages ]; then
  echo -e "${BBLUEFG}Creating packages folder.${RESET}" 
  mkdir ~/NewOSv3/Packages
 fi
+if [ -d ~/NewOSv3/Packages/${pinstall} ]; then
+echo -e "${ERRORFG}Package "${pinstall}" is already installed.${RESET}"
+else
 
 echo -e "${BBLUEFG}Downloading package...${RESET}"
 mkdir ~/NewOSv3/Packages/${pinstall}
 touch ~/NewOSv3/Packages/${pinstall}/run.sh
 curl -s "https://raw.githubusercontent.com/joshilita/packages/main/${pinstall}/run.sh" >> ~/NewOSv3/Packages/${pinstall}/run.sh
-inst=$(curl -s ${maybetes} | jq ".runafterinstall " | sed 's/"//g')
 echo -e "${GREENFG}Package installed!${RESET}"
 if (( $inst == "Yes" )); then
  echo -e "${BBLUEFG}Starting package.${RESET}" 
@@ -202,6 +165,7 @@ if (( $inst == "Yes" )); then
  bash ~/NewOSv3/Packages/${pinstall}/run.sh
 
 
+fi
 
 
 fi
@@ -276,7 +240,7 @@ if [ "$ddll"  = "$dddd" ]; then
 data=$(dialog --passwordbox "Enter your password" 10 30 3>&1- 1>&2- 2>&3-)
 if [ "$data" = "1221441" ]; then
 clear
-echo "niece"
+echo "nice"
 fi
 fi
 else
@@ -327,4 +291,3 @@ else
 echo "ins noat upadj"
 fi
 fi
-
