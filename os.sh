@@ -142,6 +142,8 @@ byey=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.js
  mkdir ~/NewOSv3/Packages/${preinstall}
 touch ~/NewOSv3/Packages/${preinstall}/run.sh
 curl -s "https://raw.githubusercontent.com/joshilita/packages/main/${preinstall}/run.sh" >> ~/NewOSv3/Packages/${pinstall}/run.sh
+inst=$(curl -s ${maybetes} | jq ".runafterinstall " | sed 's/"//g')
+
 echo -e "${GREENFG}Package installed!${RESET}"
 if (( $inst == "Yes" )); then
  echo -e "${BBLUEFG}Starting package.${RESET}" 
@@ -190,6 +192,7 @@ echo -e "${BBLUEFG}Downloading package...${RESET}"
 mkdir ~/NewOSv3/Packages/${pinstall}
 touch ~/NewOSv3/Packages/${pinstall}/run.sh
 curl -s "https://raw.githubusercontent.com/joshilita/packages/main/${pinstall}/run.sh" >> ~/NewOSv3/Packages/${pinstall}/run.sh
+inst=$(curl -s ${maybetes} | jq ".runafterinstall " | sed 's/"//g')
 echo -e "${GREENFG}Package installed!${RESET}"
 if (( $inst == "Yes" )); then
  echo -e "${BBLUEFG}Starting package.${RESET}" 
