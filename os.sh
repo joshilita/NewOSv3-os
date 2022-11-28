@@ -17,6 +17,10 @@ clear
 machine=$(uname -o)
 ifazure=$(uname -a | grep azure)
 host="$(<~/NewOSv3/.host)"
+if [ -f ~/NewOSv3/Logs.txt ]; then
+echo "" >> ~/NewOSv3/Logs.txt
+echo "($(date +\%r)) Log Started at $(date +%m-%d-%Y)." >> ~/NewOSv3/Logs.txt
+fi
 if [ ! "$machine" ]; then
 echo -e "${ERRORFG}OPERATING SYSTEM NOT FOUND.${RESET}"
 exit 0
@@ -75,10 +79,20 @@ echo -e "Version: ${version}"
 sleep 5
 clear
 echo -e "${BBLUEFG}Loading configurations.."
-sleep 2
+
+sleep 1
+if [ -f ~/NewOSv3/Logs.txt ]; then
+echo "($(date +\%r)) Configurations Loaded" >> ~/NewOSv3/Logs.txt
+fi
 echo -e "${BBLUEFG}Loading packages.."
-sleep 3
+sleep 2
+if [ -f ~/NewOSv3/Logs.txt ]; then
+echo "($(date +\%r)) Packages Loaded" >> ~/NewOSv3/Logs.txt
+fi
 echo -e "${GREENFG}Ready!${RESET}"
+if [ -f ~/NewOSv3/Logs.txt ]; then
+echo "($(date +\%r)) Everything is loaded. User needs to log in now." >> ~/NewOSv3/Logs.txt
+fi
 sleep 1
 clear
 if [ ! "$machine" ]; then
@@ -97,6 +111,9 @@ while true; do
 echo -e "Welcome ${username}, please enter your password."
 read -s enterpass
 if [ "$enterpass" = "$password" ]; then
+if [ -f ~/NewOSv3/Logs.txt ]; then
+echo "($(date +\%r)) User ${username} logged in." >> ~/NewOSv3/Logs.txt
+fi
 while true; do
 if [ -f ~/NewOSv3/flogin ]; then
 echo -e "${GREENFG}This is your first time logging in!"
@@ -114,6 +131,9 @@ fi
 
 echo -e -n "(${GREENFG}${username}${RESET}@${REDWEAKFG}${host}${RESET}${BBLUEFG}${RESET}) ${BOLD}\$ ${RESET}";
 read input
+if [ -f ~/NewOSv3/Logs.txt ]; then
+echo "($(date +\%r)) Command '${input}' was entered." >> ~/NewOSv3/Logs.txt
+fi
 if [ "$input" = "help" ]; then
 echo -e "${RESET}exit - Exits NewOS"
 echo "help - Shows you a list of commamnds and what they can do"
@@ -122,27 +142,62 @@ echo "reboot - Restarts NewOS. Will be used if there is a fatal error."
 echo "host - Change hostname. Restart is required."
 echo "pcks get - Shows list of available packages"
 echo "pcks install - Installs package"
+elif [ "$input" = "service enable logs" ]; then
+echo -e "${BBLUEFG}Enabling Log Service.${RESET}"
+FILE=~/NewOSv3/Logs.txt
+if [ -f "$FILE" ]; then
+echo -e "${ERRORFG}Log Service is already enabled.${RESET}"
+else
+sleep 2
+touch ~/NewOSv3/Logs.txt
+echo "($(date +\%r)) Log Service Enabled" >> ~/NewOSv3/Logs.txt
+echo "($(date +\%r)) Log Started at $(date +%m-%d-%Y)." >> ~/NewOSv3/Logs.txt
+echo -e "${BBLUEFG}Log Service enabled. Restarting NewOS..${RESET}"
+echo "($(date +\%r)) Rebooting NewOS (Initiated by SERVICE)" >> ~/NewOSv3/Logs.txt
+sleep 3
+newos
+exit 0
+
+
+fi
+
+
+
 
 elif [ "$input" = "pcks install" ]; then
 echo -e "${BBLUEFG}What package would you like to install?${RESET}"
 read pinstall
 echo -e "${BBLUEFG}Checking package database..${RESET}"
+if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Installing package: ${pinstall} (Requested by User)" >> ~/NewOSv3/Logs.txt
+    fi
 hello=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name" | grep -w ${pinstall} -c)
  if (( $hello == 0 )); then
  echo -e "${ERRORFG}Package "${pinstall}" is not found. Please check if you entered the right package name.${RESET}"
+ if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Package Installation Failed: (PCKG NOT FOUND)" >> ~/NewOSv3/Logs.txt
+    fi
 else
 echo -e "${GREENFG}Package found!${RESET}"
 
-echo -e "${BBLUEFG}Checking inner OS package requirement...${RESET}"
-packagereq=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($hello-1))].infolink ")
+echo -e "${BBLUEFG}Checking package requirements...${RESET}"
+packagereq=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($hello))].infolink ")
 maybetes=$(echo "${packagereq}" | sed 's/"//g')
 yas=$(curl -s ${maybetes} | jq ".requirements " | sed 's/"//g')
 inst=$(curl -s ${maybetes} | jq ".runafterinstall " | sed 's/"//g')
-if (( $inst == "Yes" )); then
+if [ "$inst" = "Yes" ]; then
  echo -e "${BBLUEFG}Package needs to be ran after installation.${RESET}" 
+   echo -e "It says: ${inst}"
+     echo -e "It says: ${yas}"
+     echo -e "It says: ${maybetes}"
+         echo -e "It says: ${packagereq}"
+    echo -e "It says: ${hello}"
+
+
+
 
 fi
-if (( $yas == "None" )); then
+if [ "$yas" = "None" ]; then
 echo -e "${BBLUEFG}No requirements found. Installing Package${RESET}"
 if [ ! -d ~/NewOSv3/Packages ]; then
  echo -e "${BBLUEFG}Creating packages folder.${RESET}" 
@@ -150,6 +205,9 @@ if [ ! -d ~/NewOSv3/Packages ]; then
 fi
 if [ -d ~/NewOSv3/Packages/${pinstall} ]; then
 echo -e "${ERRORFG}Package "${pinstall}" is already installed.${RESET}"
+ if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Package Installation Failed (PCKG ALREADY INST)" >> ~/NewOSv3/Logs.txt
+    fi
 else
 
 echo -e "${BBLUEFG}Downloading package...${RESET}"
@@ -157,6 +215,9 @@ mkdir ~/NewOSv3/Packages/${pinstall}
 touch ~/NewOSv3/Packages/${pinstall}/run.sh
 curl -s "https://raw.githubusercontent.com/joshilita/packages/main/${pinstall}/run.sh" >> ~/NewOSv3/Packages/${pinstall}/run.sh
 echo -e "${GREENFG}Package installed!${RESET}"
+ if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Package Installation Successful (PCKG INSTALLED)" >> ~/NewOSv3/Logs.txt
+    fi
 if (( $inst == "Yes" )); then
  echo -e "${BBLUEFG}Starting package.${RESET}" 
  sleep 1
@@ -172,10 +233,12 @@ fi
 fi
 
 fi
-echo "${hello}"
 elif [ "$input" = "pcks get" ]; then
 touch ~/templist.txt
 echo -e "${BBLUEFG}Getting all packages. This may take a while.${RESET}"
+if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Getting all packages (Requested by User)" >> ~/NewOSv3/Logs.txt
+    fi
 tput sc
 yessir=0
 yes=$(curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name")
@@ -209,6 +272,9 @@ elif [ "$input" = "host" ]; then
 echo -e "${BBLUEFG}What do you want to change your hostname to?${RESET}"
 read -r hostfh
 echo "${hostfh}" > ~/NewOSv3/.host
+if [ -f ~/NewOSv3/Logs.txt ]; then
+echo "($(date +\%r)) Hostname was changed to '${hostfh}' (User)" >> ~/NewOSv3/Logs.txt
+fi
 echo -e "${GREENFG}Hostname changed to: ${hostfh}. A restart is required for effect.${CLEAR}"
 
 
@@ -218,13 +284,22 @@ echo -e "${BBLUEFG}Are you sure you want to restart NewOS?${RESET}"
   read -r maybe
     if [ "$maybe" = "y" ]; then
     echo "Rebooting..."
+    if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Rebooting NewOS... (Initiated by User)" >> ~/NewOSv3/Logs.txt
+    fi
     sleep 3
+    if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) End of log" >> ~/NewOSv3/Logs.txt
+    fi
     newos
     exit 0
     fi
 
 elif [ "$input" = "exit" ]; then
 echo -e "${GREENFG}Bye!${RESET}"
+if [ -f ~/NewOSv3/Logs.txt ]; then
+echo "($(date +\%r)) Exited by user. End of log" >> ~/NewOSv3/Logs.txt
+fi
 exit 0
 
 elif [ "$input" = "changelog" ]; then
@@ -253,6 +328,9 @@ fi
  
 else
 echo -e "${ERRORFG}(${input})Command not found.${RESET}"
+if [ -f ~/NewOSv3/Logs.txt ]; then
+echo "($(date +\%r)) Command wasn't found" >> ~/NewOSv3/Logs.txt
+fi
 fi
 
 fi
