@@ -76,6 +76,10 @@ echo -e "${REDWEAKFG}(c)2021-2022 Joshilita"
 echo -e "${GBLUEFG}You can also start this with the command <newos>."
 echo -e "${REDWEAKFG}Please wait 5 minutes after a new update is released."
 echo -e "Version: ${version}"
+if [ -f ~/NewOSv3/Logs.txt ]; then
+echo -e "${ERRORFG}(WARNING)${GBLUEFG} Log Service is active. Every action will be logged in the Logs.txt file."
+ sleep 2
+    fi
 sleep 5
 clear
 echo -e "${BBLUEFG}Loading configurations.."
@@ -142,6 +146,41 @@ echo "reboot - Restarts NewOS. Will be used if there is a fatal error."
 echo "host - Change hostname. Restart is required."
 echo "pcks get - Shows list of available packages"
 echo "pcks install - Installs package"
+elif [ "$input" = "pcks uninstall" ]; then
+echo -e "${BBLUEFG}What package would you like to uninstall?${RESET}"
+read puinstall
+ if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Package Deletion: ${puinstall}">> ~/NewOSv3/Logs.txt
+    fi
+if [ -d ~/NewOSv3/Packages/${puinstall} ]; then
+byebye=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name" | grep -w ${puinstall} -n | cut -c1-1)
+ if [ -z "${byebye}" ]; then
+ echo -e "${BBLUEFG}It seems that this is a custom package. Are you sure you want to delete this? (Package not found in database) ${RESET}"
+ if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Package Deletion Warn (CSTM PCKG- NOT IN DTABASE)" >> ~/NewOSv3/Logs.txt
+    fi
+read -r uninstallmaybe
+    if [ "$uninstallmaybe" = "y" ]; then
+    rm -rf ~/NewOSv3/Packages/${puinstall}
+     echo -e "${BBLUEFG}Package Uninstalled.${RESET}"
+      if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Custom Package Deleted: ${puinstall}">> ~/NewOSv3/Logs.txt
+    fi
+
+    fi
+ 
+else
+rm -rf ~/NewOSv3/Packages/${puinstall}
+     echo -e "${BBLUEFG}Package Uninstalled.${RESET}"
+     if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Package Deleted: ${puinstall}">> ~/NewOSv3/Logs.txt
+    fi
+    fi
+else
+echo -e "${ERRORFG}Package not installed. Did you enter it in correctly?"
+fi
+
+
 elif [ "$input" = "service enable logs" ]; then
 echo -e "${BBLUEFG}Enabling Log Service.${RESET}"
 FILE=~/NewOSv3/Logs.txt
@@ -171,8 +210,8 @@ echo -e "${BBLUEFG}Checking package database..${RESET}"
 if [ -f ~/NewOSv3/Logs.txt ]; then
     echo "($(date +\%r)) Installing package: ${pinstall} (Requested by User)" >> ~/NewOSv3/Logs.txt
     fi
-hello=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name" | grep -w ${pinstall} -c)
- if (( $hello == 0 )); then
+hello=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name" | grep -w ${pinstall} -n | cut -c1-1)
+ if [ -z "${hello}" ]; then
  echo -e "${ERRORFG}Package "${pinstall}" is not found. Please check if you entered the right package name.${RESET}"
  if [ -f ~/NewOSv3/Logs.txt ]; then
     echo "($(date +\%r)) Package Installation Failed: (PCKG NOT FOUND)" >> ~/NewOSv3/Logs.txt
@@ -181,23 +220,32 @@ else
 echo -e "${GREENFG}Package found!${RESET}"
 
 echo -e "${BBLUEFG}Checking package requirements...${RESET}"
-packagereq=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($hello))].infolink ")
+packagereq=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($hello-1))].infolink ")
 maybetes=$(echo "${packagereq}" | sed 's/"//g')
 yas=$(curl -s ${maybetes} | jq ".requirements " | sed 's/"//g')
 inst=$(curl -s ${maybetes} | jq ".runafterinstall " | sed 's/"//g')
 if [ "$inst" = "Yes" ]; then
  echo -e "${BBLUEFG}Package needs to be ran after installation.${RESET}" 
-   echo -e "It says: ${inst}"
-     echo -e "It says: ${yas}"
-     echo -e "It says: ${maybetes}"
-         echo -e "It says: ${packagereq}"
-    echo -e "It says: ${hello}"
+   
 
 
 
 
 fi
-if [ "$yas" = "None" ]; then
+# echo -e "It says: ${inst}"
+#      echo -e "It says: ${yas}"
+#      echo -e "It says: ${maybetes}"
+#          echo -e "It says: ${packagereq}"
+#     echo -e "It says: ${hello}"
+ if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Package Info:" >> ~/NewOSv3/Logs.txt
+    echo "Info Link: ${maybetes}" >> ~/NewOSv3/Logs.txt
+    echo "Package Number: ${hello}" >> ~/NewOSv3/Logs.txt
+    echo "Start automatically after install: ${inst}" >> ~/NewOSv3/Logs.txt
+
+
+
+    fi
 echo -e "${BBLUEFG}No requirements found. Installing Package${RESET}"
 if [ ! -d ~/NewOSv3/Packages ]; then
  echo -e "${BBLUEFG}Creating packages folder.${RESET}" 
@@ -218,7 +266,7 @@ echo -e "${GREENFG}Package installed!${RESET}"
  if [ -f ~/NewOSv3/Logs.txt ]; then
     echo "($(date +\%r)) Package Installation Successful (PCKG INSTALLED)" >> ~/NewOSv3/Logs.txt
     fi
-if (( $inst == "Yes" )); then
+if [ "$inst" = "Yes" ]; then
  echo -e "${BBLUEFG}Starting package.${RESET}" 
  sleep 1
 
@@ -229,7 +277,6 @@ if (( $inst == "Yes" )); then
 fi
 
 
-fi
 fi
 
 fi
@@ -285,7 +332,7 @@ echo -e "${BBLUEFG}Are you sure you want to restart NewOS?${RESET}"
     if [ "$maybe" = "y" ]; then
     echo "Rebooting..."
     if [ -f ~/NewOSv3/Logs.txt ]; then
-    echo "($(date +\%r)) Rebooting NewOS... (Initiated by User)" >> ~/NewOSv3/Logs.txt
+    echo "($(date +\%r)) Rebooting NewOS (Initiated by User)" >> ~/NewOSv3/Logs.txt
     fi
     sleep 3
     if [ -f ~/NewOSv3/Logs.txt ]; then
@@ -322,6 +369,9 @@ else
 if [ -d ~/NewOSv3/Packages/${input} ]; then
 if grep -q "404: Not Found" ~/NewOSv3/Packages/${input}/run.sh; then
   echo -e "${ERRORFG}Package was installed incorrectly. Please try to install the package again.${RESET}"
+  if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Package Error (PCKG INSTALLED INCORRECTLY WITH 404)" >> ~/NewOSv3/Logs.txt
+    fi
 else
 bash ~/NewOSv3/Packages/${input}/run.sh
 fi
@@ -329,7 +379,7 @@ fi
 else
 echo -e "${ERRORFG}(${input})Command not found.${RESET}"
 if [ -f ~/NewOSv3/Logs.txt ]; then
-echo "($(date +\%r)) Command wasn't found" >> ~/NewOSv3/Logs.txt
+echo "($(date +\%r)) Command was not found" >> ~/NewOSv3/Logs.txt
 fi
 fi
 
