@@ -50,7 +50,7 @@ if [ -f ~/NewOSv3/startup ]; then
 if [ "$machine" = "Android" ]; then
 echo -e "${ERRORFG}Unfortunately, Termux is not supported. ${BBLUEFG}Operating system detected as ${machine} ${RESET}"
 fi
-echo -e "${GBLUEFG}Welcome ${username}, to NewOS V3!"
+echo -e "${GBLUEFG}Welcome New User, to NewOS V3!"
 sleep 1 
 echo "It looks like its your first time here!"
 if [ ! "$machine" ]; then
@@ -88,7 +88,7 @@ sleep 5
 clear
 echo -e "${BBLUEFG}Loading configurations.."
 hostlol=~/NewOSv3/.host
-userlol=~/NewOSv3/.user
+userlol=~/NewOSv3/.name
 passlol=~/NewOSv3/.pass
 if [ ! -f "$hostlol" ]; then
     echo -e "${ERRORFG}FATAL ERROR: Host configurations are inaccessible. Please reinstall NewOS.${RESET}"
