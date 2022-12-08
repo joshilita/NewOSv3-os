@@ -18,7 +18,11 @@ machine=$(uname -o)
 ifazure=$(uname -a | grep azure)
 rebootrequire=false
 rebootrecon=false
-
+if [ -f ~/NewOSv3/.startscript ]; then
+echo -e "${BBLUEFG}Starting startup commands.${RESET}"
+bash ~/NewOSv3/Packages/$(cat .startscript)/run.sh auto
+exit 0
+fi
 if [ -f ~/NewOSv3/Logs.txt ]; then
 echo "" >> ~/NewOSv3/Logs.txt
 echo "($(date +\%r)) Log Started at $(date +%m-%d-%Y)." >> ~/NewOSv3/Logs.txt
@@ -135,6 +139,7 @@ if [ "$enterpass" = "$password" ]; then
 if [ -f ~/NewOSv3/Logs.txt ]; then
 echo "($(date +\%r)) User ${username} logged in." >> ~/NewOSv3/Logs.txt
 fi
+
 while true; do
 if [ -f ~/NewOSv3/flogin ]; then
 echo -e "${GREENFG}This is your first time logging in!"
@@ -152,6 +157,10 @@ fi
 
 echo -e -n "(${GREENFG}${username}${RESET}@${REDWEAKFG}${host}${RESET}${BBLUEFG}${RESET}) ${BOLD}\$ ${RESET}";
 read input
+stargument=$(echo $input | awk '{print $1}')
+ndargument=$(echo $input | awk '{print $2}')
+rdargument=$(echo $input | awk '{print $3}')
+
 if [ $rebootrequire == true ]; then
 echo -e "${ERRORFG}You are unable to do anything until you reboot. Do you want to reboot? (Reboot Required)${RESET}"
 read -r rebootplss
@@ -169,9 +178,21 @@ if [ $rebootrecon == true ]; then
 echo -e "${ERRORFG}Reboot recomendation is active. When you have time, please reboot NewOS.${RESET}"
 fi
 if [ -f ~/NewOSv3/Logs.txt ]; then
+ifid=$(cat Logs.txt | tr -dc '0-9' | grep -x "Log ID: $input")
+if [ "$ifid" ]; then
+echo "($(date +\%r)) Command that was just entered contained an ID log. " >> ~/NewOSv3/Logs.txt
+
+else
+
+if [ "${stargument}" == "" ]; then
+lol=true
+else
 echo "($(date +\%r)) Command '${input}' was entered." >> ~/NewOSv3/Logs.txt
 fi
-if [ "$input" = "help" ]; then
+
+fi
+fi
+if [ "${stargument}" = "help" ]; then
 echo -e "${RESET}exit - Exits NewOS"
 echo "help - Shows you a list of commamnds and what they can do"
 echo "changelog - It shows you a changelog."
@@ -186,7 +207,7 @@ echo "service enable logs - Enables the logging service"
 echo "service disable logs - Disables the logging service"
 
 
-elif [ "$input" = "logs" ]; then
+elif [ "${stargument}" = "logs" ]; then
 FILE=~/NewOSv3/Logs.txt
 if [ -f "$FILE" ]; then
 echo -e "${BBLUEFG}What is the ID of the log?${RESET}"
@@ -213,7 +234,7 @@ done
 else
 echo -e "${ERRORFG}Log Service is not enabled. Abort${RESET}"
 fi
-elif [ "$input" = "logs all" ]; then
+elif [ "${stargument}" = "logs all" ]; then
 FILE=~/NewOSv3/Logs.txt
 if [ -f "$FILE" ]; then
 maybenohaha=$(cat Logs.txt | grep "Log ID" | sed 's/Log ID://')
@@ -236,96 +257,56 @@ done
 else
 echo -e "${ERRORFG}Log Service is not enabled. Abort${RESET}"
 fi
-elif [ "$input" = "pcks uninstall" ]; then
-
-echo -e "${BBLUEFG}What package would you like to uninstall?${RESET}"
-read puinstall
- if [ -f ~/NewOSv3/Logs.txt ]; then
-    echo "($(date +\%r)) Package Deletion: ${puinstall}">> ~/NewOSv3/Logs.txt
-    fi
-if [ -d ~/NewOSv3/Packages/${puinstall} ]; then
-byebye=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name" | grep -w ${puinstall} -n | cut -c1-1)
- if [ -z "${byebye}" ]; then
- echo -e "${BBLUEFG}It seems that this is a custom package. Are you sure you want to delete this? (Package not found in database) ${RESET}"
- if [ -f ~/NewOSv3/Logs.txt ]; then
-    echo "($(date +\%r)) Package Deletion Warn (CSTM PCKG- NOT IN DTABASE)" >> ~/NewOSv3/Logs.txt
-    fi
-read -r uninstallmaybe
-    if [ "$uninstallmaybe" = "y" ]; then
-    rm -rf ~/NewOSv3/Packages/${puinstall}
-     echo -e "${BBLUEFG}Package Uninstalled.${RESET}"
-      if [ -f ~/NewOSv3/Logs.txt ]; then
-    echo "($(date +\%r)) Custom Package Deleted: ${puinstall}">> ~/NewOSv3/Logs.txt
-    fi
-
-    fi
- 
+elif [ "${stargument}" = "pcks" ]; then
+if [ "${ndargument}" = "get" ]; then
+if [ "${rdargument}" ]; then
+echo -e "${BBLUEFG}Getting package...${RESET}"
+hay=$(curl -s "https://raw.githubusercontent.com/joshilita/packages/main/${rdargument}/packageinfo.txt")
+if [ "${hay}" ]; then
+echo $hay
 else
-rm -rf ~/NewOSv3/Packages/${puinstall}
-     echo -e "${BBLUEFG}Package Uninstalled.${RESET}"
-     if [ -f ~/NewOSv3/Logs.txt ]; then
-    echo "($(date +\%r)) Package Deleted: ${puinstall}">> ~/NewOSv3/Logs.txt
-    fi
-    fi
-else
-echo -e "${ERRORFG}Package not installed. Did you enter it in correctly?"
-fi
-elif [ "$input" = "service disable logs" ]; then
-FILE=~/NewOSv3/Logs.txt
-if [ -f "$FILE" ]; then
-echo -e "${ERRORFG}This will delete the logs file. Are you sure? (Type save to save into a new file)${RESET}"
-read -r logsdelete
-    if [ "$logsdelete" = "y" ]; then
-    rm -rf ~/NewOSv3/Logs.txt
-    echo -e "${ERRORFG}Service Disabled. Rebooting${RESET}"
-    sleep 1
-    newos
-    exit 0
-    elif [ "$logsdelete" = "save" ]; then
-    touch "$(date +%m-%d-%Y)-${randomnumber}-Logs.txt"
-    cat Logs.txt >> "$(date +%m-%d-%Y)-${randomnumber}-Logs.txt"
-    echo -e "${BBLUEFG}Saved into $(date +%m-%d-%Y)-${randomnumber}-Logs.txt - Service Disabled. Reboot required at level HIGH"
-    rebootrequire=true
-    rm -rf ~/NewOSv3/Logs.txt
-
-
-    else
-    echo -e "${ERRORFG}Okay. Abort${RESET}"
-     if [ -f ~/NewOSv3/Logs.txt ]; then
-    echo "($(date +\%r)) Thank you for not deleting me :> (aborted logs service disable)" >> ~/NewOSv3/Logs.txt
-    fi
-    
-    fi
-else
-echo -e "${ERRORFG}Log Service is not enabled. Abort${RESET}"
-
-fi
-elif [ "$input" = "service enable logs" ]; then
-echo -e "${BBLUEFG}Enabling Log Service.${RESET}"
-FILE=~/NewOSv3/Logs.txt
-if [ -f "$FILE" ]; then
-echo -e "${ERRORFG}Log Service is already enabled.${RESET}"
-else
-sleep 2
-touch ~/NewOSv3/Logs.txt
-echo "$(figlet NewOS Dev Log)" >> ~/NewOSv3/Logs.txt
-echo "($(date +\%r)) Log Service Enabled" >> ~/NewOSv3/Logs.txt
-echo "($(date +\%r)) Log Started at $(date +%m-%d-%Y)." >> ~/NewOSv3/Logs.txt
-echo -e "${BBLUEFG}Log Service enabled. Restarting NewOS..${RESET}"
-echo "($(date +\%r)) Rebooting NewOS (Initiated by SERVICE)" >> ~/NewOSv3/Logs.txt
-sleep 3
-newos
-exit 0
-
-
+echo "not found"
 fi
 
+else
+touch ~/templist.txt
+echo -e "${BBLUEFG}Getting all packages. This may take a while.${RESET}"
+if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Getting all packages (Requested by User)" >> ~/NewOSv3/Logs.txt
+    fi
+tput sc
+yessir=0
+yes=$(curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name")
+amount=$(echo "$yes" | wc -l)
+actual=$(($amount-1))
+# echo $(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[${actual}]")
+for line in $yes 
+do
 
+yessir=$(($yessir+1))
+tput rc;tput el 
+echo "Percentage: ${yessir}/${amount}"
+   echo "Name: ${line}"|sed 's/"//g' >> ~/templist.txt
+info=$(curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($yessir-1))].infolink ")
+maybeso=$(echo "${info}" | sed 's/"//g')
+idkhaha=$(echo "${line}" | sed 's/"//g')
 
+echo "Description: $(curl -s ${maybeso} | jq ".description " | sed 's/"//g')" >> ~/templist.txt
+if [ -d ~/NewOSv3/Packages/${idkhaha} ]; then
+echo "Installed: Yes" >> ~/templist.txt
+else
+echo "Installed: No" >> ~/templist.txt
 
-elif [ "$input" = "pcks install" ]; then
-echo -e "${BBLUEFG}What package would you like to install?${RESET}"
-read pinstall
+fi
+echo "" >> ~/templist.txt
+done
+cat ~/templist.txt
+rm  ~/templist.txt
+fi
+elif [ "${ndargument}" = "install" ]; then
+
+pinstall=$rdargument
+
 echo -e "${BBLUEFG}Checking package database..${RESET}"
 if [ -f ~/NewOSv3/Logs.txt ]; then
     echo "($(date +\%r)) Installing package: ${pinstall} (Requested by User)" >> ~/NewOSv3/Logs.txt
@@ -396,46 +377,105 @@ if [ "$inst" = "Yes" ]; then
 
 fi
 
-
 fi
-
 fi
-elif [ "$input" = "pcks get" ]; then
-touch ~/templist.txt
-echo -e "${BBLUEFG}Getting all packages. This may take a while.${RESET}"
-if [ -f ~/NewOSv3/Logs.txt ]; then
-    echo "($(date +\%r)) Getting all packages (Requested by User)" >> ~/NewOSv3/Logs.txt
+elif [ "${ndargument}" = "uninstall" ]; then
+puinstall=$rdargument
+
+
+ if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Package Deletion: ${puinstall}">> ~/NewOSv3/Logs.txt
     fi
-tput sc
-yessir=0
-yes=$(curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name")
-amount=$(echo "$yes" | wc -l)
-actual=$(($amount-1))
-# echo $(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[${actual}]")
-for line in $yes 
-do
+if [ -d ~/NewOSv3/Packages/${puinstall} ]; then
+byebye=$(curl -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[].name" | grep -w ${puinstall} -n | cut -c1-1)
+ if [ -z "${byebye}" ]; then
+ echo -e "${BBLUEFG}It seems that this is a custom package. Are you sure you want to delete this? (Package not found in database) ${RESET}"
+ if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Package Deletion Warn (CSTM PCKG- NOT IN DTABASE)" >> ~/NewOSv3/Logs.txt
+    fi
+read -r uninstallmaybe
+    if [ "$uninstallmaybe" = "y" ]; then
+    rm -rf ~/NewOSv3/Packages/${puinstall}
+     echo -e "${BBLUEFG}Package Uninstalled.${RESET}"
+      if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Custom Package Deleted: ${puinstall}">> ~/NewOSv3/Logs.txt
+    fi
 
-yessir=$(($yessir+1))
-tput rc;tput el 
-echo "Percentage: ${yessir}/${amount}"
-   echo "Name: ${line}"|sed 's/"//g' >> ~/templist.txt
-info=$(curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/joshilita/packages/main/list.json | jq ".Packages[$(($yessir-1))].infolink ")
-maybeso=$(echo "${info}" | sed 's/"//g')
-idkhaha=$(echo "${line}" | sed 's/"//g')
-
-echo "Description: $(curl -s ${maybeso} | jq ".description " | sed 's/"//g')" >> ~/templist.txt
-if [ -d ~/NewOSv3/Packages/${idkhaha} ]; then
-echo "Installed: Yes" >> ~/templist.txt
+    fi
+ 
 else
-echo "Installed: No" >> ~/templist.txt
+rm -rf ~/NewOSv3/Packages/${puinstall}
+     echo -e "${BBLUEFG}Package Uninstalled.${RESET}"
+     if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Package Deleted: ${puinstall}">> ~/NewOSv3/Logs.txt
+    fi
+    fi
+else
+echo -e "${ERRORFG}Package not installed. Did you enter it in correctly?"
+fi
+else
+echo "pcks install/get/uninstall"
 
 fi
-echo "" >> ~/templist.txt
-done
-cat ~/templist.txt
-rm  ~/templist.txt
 
-elif [ "$input" = "host" ]; then
+
+elif [ "$input" = "service disable logs" ]; then
+FILE=~/NewOSv3/Logs.txt
+if [ -f "$FILE" ]; then
+echo -e "${ERRORFG}This will delete the logs file. Are you sure? (Type save to save into a new file)${RESET}"
+read -r logsdelete
+    if [ "$logsdelete" = "y" ]; then
+    rm -rf ~/NewOSv3/Logs.txt
+    echo -e "${ERRORFG}Service Disabled. Rebooting${RESET}"
+    sleep 1
+    newos
+    exit 0
+    elif [ "$logsdelete" = "save" ]; then
+    touch "$(date +%m-%d-%Y)-${randomnumber}-Logs.txt"
+    cat Logs.txt >> "$(date +%m-%d-%Y)-${randomnumber}-Logs.txt"
+    echo -e "${BBLUEFG}Saved into $(date +%m-%d-%Y)-${randomnumber}-Logs.txt - Service Disabled. Reboot required at level HIGH"
+    rebootrequire=true
+    rm -rf ~/NewOSv3/Logs.txt
+
+
+    else
+    echo -e "${ERRORFG}Okay. Abort${RESET}"
+     if [ -f ~/NewOSv3/Logs.txt ]; then
+    echo "($(date +\%r)) Thank you for not deleting me :> (aborted logs service disable)" >> ~/NewOSv3/Logs.txt
+    fi
+    
+    fi
+else
+echo -e "${ERRORFG}Log Service is not enabled. Abort${RESET}"
+
+fi
+elif [ "${input}" = "service enable logs" ]; then
+echo -e "${BBLUEFG}Enabling Log Service.${RESET}"
+FILE=~/NewOSv3/Logs.txt
+if [ -f "$FILE" ]; then
+echo -e "${ERRORFG}Log Service is already enabled.${RESET}"
+else
+sleep 2
+touch ~/NewOSv3/Logs.txt
+echo "$(figlet NewOS Dev Log)" >> ~/NewOSv3/Logs.txt
+echo "($(date +\%r)) Log Service Enabled" >> ~/NewOSv3/Logs.txt
+echo "($(date +\%r)) Log Started at $(date +%m-%d-%Y)." >> ~/NewOSv3/Logs.txt
+echo -e "${BBLUEFG}Log Service enabled. Restarting NewOS..${RESET}"
+echo "($(date +\%r)) Rebooting NewOS (Initiated by SERVICE)" >> ~/NewOSv3/Logs.txt
+sleep 3
+newos
+exit 0
+
+
+fi
+
+
+
+
+
+
+
+elif [ "${stargument}" = "host" ]; then
 echo -e "${BBLUEFG}What do you want to change your hostname to?${RESET}"
 read -r hostfh
 echo "${hostfh}" > ~/NewOSv3/.host
@@ -447,7 +487,7 @@ rebootrecon=true
 
 
 
-elif [ "$input" = "reboot" ]; then
+elif [ "${stargument}" = "reboot" ]; then
 echo -e "${BBLUEFG}Are you sure you want to restart NewOS?${RESET}"
   read -r maybe
     if [ "$maybe" = "y" ]; then
@@ -463,19 +503,20 @@ echo -e "${BBLUEFG}Are you sure you want to restart NewOS?${RESET}"
     exit 0
     fi
 
-elif [ "$input" = "exit" ]; then
+elif [ "${stargument}" = "exit" ]; then
 echo -e "${GREENFG}Bye!${RESET}"
 if [ -f ~/NewOSv3/Logs.txt ]; then
 echo "($(date +\%r)) Exited by user. End of log" >> ~/NewOSv3/Logs.txt
 fi
 exit 0
 
-elif [ "$input" = "changelog" ]; then
+elif [ "${stargument}" = "changelog" ]; then
 echo -e $(curl -s 'https://raw.githubusercontent.com/joshilita/NewOSV3/main/changelog.txt')
-
-elif [ "$input" = "" ]; then
-echo "type something"
-elif [ "$input" = "dlg1221" ]; then
+elif [ "${ndargument}" = "auto" ]; then
+echo -e "${ERRORFG}This command can only be ran by system.${RESET}"
+elif [ "${stargument}" = "" ]; then
+echo "Type something."
+elif [ "${stargument}" = "dlg1221" ]; then
 echo -e "${ERRORFG}01000101 01101110 01110100 01100101 01110010 00100000 01110000 01100001 01110011 01110011 00101110"
 read -s ddll
 dddd=$(curl -s 'https://raw.githubusercontent.com/joshilita/joshilita/main/bigchicjpotpie')
@@ -487,20 +528,24 @@ echo "nice"
 fi
 fi
 else
-if [ -d ~/NewOSv3/Packages/${input} ]; then
-if grep -q "404: Not Found" ~/NewOSv3/Packages/${input}/run.sh; then
+if [ -d ~/NewOSv3/Packages/${stargument} ]; then
+if grep -q "404: Not Found" ~/NewOSv3/Packages/${stargument}/run.sh; then
   echo -e "${ERRORFG}Package was installed incorrectly. Please try to install the package again.${RESET}"
   if [ -f ~/NewOSv3/Logs.txt ]; then
     echo "($(date +\%r)) Package Error (PCKG INSTALLED INCORRECTLY WITH 404)" >> ~/NewOSv3/Logs.txt
     fi
 else
-bash ~/NewOSv3/Packages/${input}/run.sh
+bash ~/NewOSv3/Packages/${stargument}/run.sh "$ndargument"
 fi
  
 else
-echo -e "${ERRORFG}(${input})Command not found.${RESET}"
+echo -e "${ERRORFG}(${stargument})Command not found.${RESET}"
 if [ -f ~/NewOSv3/Logs.txt ]; then
+if [ "${stargument}" == "" ]; then
+lol=true
+else
 echo "($(date +\%r)) Command was not found" >> ~/NewOSv3/Logs.txt
+fi
 fi
 fi
 
@@ -516,7 +561,7 @@ exit 0
 elif [ "$enterpass" = "changelog" ]; then 
 echo -e $(curl -s 'https://raw.githubusercontent.com/joshilita/NewOSV3/main/changelog.txt')
 else
-echo -e "${ERRORFG}Wrong pass!"
+echo -e "${ERRORFG}Password incorrect. Please try again.${RESET}"
 fi
 done
 fi
